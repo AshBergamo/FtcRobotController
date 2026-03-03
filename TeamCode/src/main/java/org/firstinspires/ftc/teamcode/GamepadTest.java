@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class GamepadTest extends OpMode {
     MotorControl bench = new MotorControl();
     ServoPos servo = new ServoPos();
+    IMUControler imu = new IMUControler();
     @Override
     public void init(){
         bench.init(hardwareMap);
         servo.init(hardwareMap);
+        imu.init(hardwareMap);
     }
     @Override
     public void loop(){
@@ -40,6 +42,8 @@ public class GamepadTest extends OpMode {
         else if (gamepad1.b){
             servo.setPos(1.0);
         }
+
+        telemetry.addData("Yaw/Heading", imu.getHeading());
 
     }
 }
