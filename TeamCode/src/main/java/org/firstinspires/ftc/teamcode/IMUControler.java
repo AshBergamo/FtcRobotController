@@ -22,5 +22,6 @@ public class IMUControler {
 
     public double getHeading(){
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES); //Yaw = giro
+        // Já é normalizado, quando passa de -180 vai para +180
     }
 }

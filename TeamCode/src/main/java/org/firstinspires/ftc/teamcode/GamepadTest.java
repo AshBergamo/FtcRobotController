@@ -43,7 +43,7 @@ public class GamepadTest extends OpMode {
             servo.setPos(1.0);
         }
 
-        telemetry.addData("Yaw/Heading", imu.getHeading());
+        telemetry.addData("Yaw/Heading", imu.getHeading()); // Já é normalizado, quando passa de -180 vai para +180
 
     }
 }
