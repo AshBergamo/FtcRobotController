@@ -36,6 +36,7 @@ public class Robo1TeleOp extends OpMode {
         }
 
         telemetry.addLine(motors.AddTelemetryMotor());
+        telemetry.addData("X", gamepad1.right_stick_x);
         telemetry.update();
     }
 }
