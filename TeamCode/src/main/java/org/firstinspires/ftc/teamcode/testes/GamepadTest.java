@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Disabled
 @TeleOp
 public class GamepadTest extends OpMode {
     MotorControl bench = new MotorControl();
@@ -37,7 +38,7 @@ public class GamepadTest extends OpMode {
             bench.stopMotor();
         }
         if (gamepad1.a){
-            servo.setPos(-1.0);
+            servo.setPos(0.0);
         }
         else if (gamepad1.b){
             servo.setPos(1.0);
