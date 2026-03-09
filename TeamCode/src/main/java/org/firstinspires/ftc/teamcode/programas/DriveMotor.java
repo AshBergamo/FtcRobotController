@@ -21,6 +21,7 @@ public class DriveMotor {
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void drive(double lado, double frente){
+        frente *= (-1);
         double PM1 = frente + lado;
         double PM2 = frente - lado;
 
