@@ -18,25 +18,11 @@ public class Robo1TeleOp extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.right_trigger_pressed){
-            motors.SetMotor1(1.0, DcMotor.Direction.FORWARD);
-            motors.SetMotor2(1.0, DcMotor.Direction.REVERSE);
-        }else if (gamepad1.left_trigger_pressed) {
-            motors.SetMotor1(-1.0, DcMotor.Direction.FORWARD);
-            motors.SetMotor2(-1.0, DcMotor.Direction.REVERSE);
-        }else if(gamepad1.right_stick_x > 0.005){
-            motors.SetMotor1(1.0, DcMotorSimple.Direction.FORWARD);
-            motors.SetMotor2(1.0, DcMotorSimple.Direction.REVERSE);
-        }else if(gamepad1.right_stick_x < -0.005){
-            motors.SetMotor1(-1.0, DcMotorSimple.Direction.FORWARD);
-            motors.SetMotor2(-1.0, DcMotorSimple.Direction.REVERSE);
-        }else{
-            motors.SetMotor1(0.0, DcMotor.Direction.FORWARD);
-            motors.SetMotor2(0.0, DcMotor.Direction.REVERSE);
-        }
+        motors.drive(gamepad1.right_stick_x, gamepad1.right_stick_y);
 
         telemetry.addLine(motors.AddTelemetryMotor());
         telemetry.addData("X", gamepad1.right_stick_x);
+        telemetry.addData("Y", gamepad1.right_stick_y);
         telemetry.update();
     }
 }

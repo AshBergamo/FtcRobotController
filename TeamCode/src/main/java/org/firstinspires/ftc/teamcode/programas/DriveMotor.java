@@ -10,23 +10,29 @@ public class DriveMotor {
         motor1 = hwMap.get(DcMotor.class, "motor1");
         motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor1.setDirection(DcMotor.Direction.FORWARD);
 
         motor2 = hwMap.get(DcMotor.class, "motor2");
         motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor2.setDirection(DcMotor.Direction.REVERSE);
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    public void SetMotor1(double speed, DcMotorSimple.Direction direcao){
-        motor1.setDirection(direcao);
-        motor1.setPower(speed);
-    }
-    public void SetMotor2(double speed, DcMotorSimple.Direction direcao){
-        motor2.setDirection(direcao);
-        motor2.setPower(speed);
-    }
+    public void drive(double lado, double frente){
+        double PM1 = frente + lado;
+        double PM2 = frente - lado;
 
+        double maior = Math.max(Math.abs(PM1), Math.abs(PM2));
+        if (maior > 1){
+            PM1 /= maior;
+            PM2 /= maior;
+        }
+
+        motor1.setPower(PM1);
+        motor2.setPower(PM2);
+    }
     public String AddTelemetryMotor(){
         int motor1Pos = motor1.getCurrentPosition();
         int motor2Pos = motor2.getCurrentPosition();
