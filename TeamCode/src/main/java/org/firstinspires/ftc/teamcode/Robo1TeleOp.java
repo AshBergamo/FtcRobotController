@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-
 import org.firstinspires.ftc.teamcode.programas.DriveMotor;
 import org.firstinspires.ftc.teamcode.programas.IMUSensor;
 
