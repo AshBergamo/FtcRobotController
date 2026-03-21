@@ -15,6 +15,7 @@ public class Robo1TeleOp extends OpMode {
     @Override
     public void init() {
         motors.init(hardwareMap);
+        imu.init(hardwareMap);
     }
 
     @Override

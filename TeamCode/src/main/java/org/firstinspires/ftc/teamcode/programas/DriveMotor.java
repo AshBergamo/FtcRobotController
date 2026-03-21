@@ -10,12 +10,12 @@ public class DriveMotor {
         motor1 = hwMap.get(DcMotor.class, "motor1");
         motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor1.setDirection(DcMotor.Direction.FORWARD);
+        motor1.setDirection(DcMotor.Direction.REVERSE);
 
         motor2 = hwMap.get(DcMotor.class, "motor2");
         motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor2.setDirection(DcMotor.Direction.REVERSE);
+        motor2.setDirection(DcMotor.Direction.FORWARD);
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

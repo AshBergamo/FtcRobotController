@@ -11,6 +11,8 @@ public class IMUSensor {
     public void init(HardwareMap hwMap){
         imu = hwMap.get(IMU.class, "imu");
 
+        imu.resetYaw();
+
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
