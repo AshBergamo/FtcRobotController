@@ -7,10 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 import org.firstinspires.ftc.teamcode.programas.DriveMotor;
+import org.firstinspires.ftc.teamcode.programas.IMUSensor;
 
 @TeleOp
 public class Robo1TeleOp extends OpMode {
     DriveMotor motors = new DriveMotor();
+    IMUSensor imu = new IMUSensor();
     @Override
     public void init() {
         motors.init(hardwareMap);
@@ -23,6 +25,7 @@ public class Robo1TeleOp extends OpMode {
         telemetry.addLine(motors.AddTelemetryMotor());
         telemetry.addData("X", gamepad1.right_stick_x);
         telemetry.addData("Y", gamepad1.right_stick_y);
+        telemetry.addData("Angulo Direção", imu.getHeading());
         telemetry.update();
     }
 }

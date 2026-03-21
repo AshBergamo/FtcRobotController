@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.testes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
+@Disabled
 public class ServoPos {
     private Servo servoPos; //servo de posicao
     //private CRServo servoRot;

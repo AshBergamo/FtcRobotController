@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.testes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
+@Disabled
 public class MotorControl {
     private DcMotor motor;
     public void init(HardwareMap hwMap){

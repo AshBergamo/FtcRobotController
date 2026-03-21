@@ -1,21 +1,19 @@
-package org.firstinspires.ftc.teamcode.testes;
+package org.firstinspires.ftc.teamcode.programas;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-@Disabled
-public class IMUControler {
+
+public class IMUSensor {
     private IMU imu;
 
     public void init(HardwareMap hwMap){
         imu = hwMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP, //colocar a direção da logo do controlador no robo (neste caso para cima)
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD //colocar a direção do usb do controlador no robo (nesse caso para frente)
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
         );
 
         imu.initialize(new IMU.Parameters(RevOrientation));
