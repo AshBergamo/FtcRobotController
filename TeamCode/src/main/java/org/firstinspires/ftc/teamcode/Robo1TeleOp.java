@@ -25,6 +25,7 @@ public class Robo1TeleOp extends OpMode {
         telemetry.addData("X", gamepad1.right_stick_x);
         telemetry.addData("Y", gamepad1.right_stick_y);
         telemetry.addData("Angulo Direção", imu.getHeading());
+        telemetry.addData("Angulo Direção", imu.getHeading());
         telemetry.update();
 
     }

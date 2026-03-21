@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Disabled
 public class DriveMotorGeared {
     private DcMotor motor1, motor2;
-    private float gear;
+    //private float gear;
 
     public void init(HardwareMap hwMap){
         motor1 = hwMap.get(DcMotor.class, "motor1");
@@ -25,12 +25,13 @@ public class DriveMotorGeared {
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        gear = 1;
+ //       gear = 3;
     }
-    public void drive(double lado, double frente){
+    public void drive(double lado, double frente, boolean trigger){
+        if (trigger) {frente = frente/2;}
 
-        double PM1 = frente + lado * (gear/5);
-        double PM2 = frente - lado * (gear/5);
+        double PM1 = frente + lado ;
+        double PM2 = frente - lado ;
 
         double maior = Math.max(Math.abs(PM1), Math.abs(PM2));
         if (maior > 1){
@@ -42,11 +43,15 @@ public class DriveMotorGeared {
         motor2.setPower(PM2);
     }
 
-    public void gearChange(int change){
+    /*public void gearChange(int change){
         gear += change;
         if (gear < 1) {gear=1;}
         if (gear > 5) {gear=5;}
     }
+
+    public float getGear() {
+        return gear;
+    }*/
     public String AddTelemetryMotor(){
         int motor1Pos = motor1.getCurrentPosition();
         int motor2Pos = motor2.getCurrentPosition();
