@@ -2,8 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 
 import org.firstinspires.ftc.teamcode.programas.DriveMotor;
 import org.firstinspires.ftc.teamcode.programas.IMUSensor;
@@ -27,5 +26,6 @@ public class Robo1TeleOp extends OpMode {
         telemetry.addData("Y", gamepad1.right_stick_y);
         telemetry.addData("Angulo Direção", imu.getHeading());
         telemetry.update();
+
     }
 }

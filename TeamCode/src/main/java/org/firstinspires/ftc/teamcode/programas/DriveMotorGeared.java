@@ -1,14 +1,20 @@
 package org.firstinspires.ftc.teamcode.programas;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class DriveMotor {
+@Disabled
+public class DriveMotorGeared {
     private DcMotor motor1, motor2;
+    private float gear;
+
     public void init(HardwareMap hwMap){
         motor1 = hwMap.get(DcMotor.class, "motor1");
         motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor1.setDirection(DcMotor.Direction.FORWARD);
         motor1.setDirection(DcMotor.Direction.FORWARD);
 
         motor2 = hwMap.get(DcMotor.class, "motor2");
@@ -18,11 +24,13 @@ public class DriveMotor {
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        gear = 1;
     }
     public void drive(double lado, double frente){
 
-        double PM1 = frente + lado;
-        double PM2 = frente - lado;
+        double PM1 = frente + lado * (gear/5);
+        double PM2 = frente - lado * (gear/5);
 
         double maior = Math.max(Math.abs(PM1), Math.abs(PM2));
         if (maior > 1){
@@ -32,6 +40,12 @@ public class DriveMotor {
 
         motor1.setPower(PM1);
         motor2.setPower(PM2);
+    }
+
+    public void gearChange(int change){
+        gear += change;
+        if (gear < 1) {gear=1;}
+        if (gear > 5) {gear=5;}
     }
     public String AddTelemetryMotor(){
         int motor1Pos = motor1.getCurrentPosition();
