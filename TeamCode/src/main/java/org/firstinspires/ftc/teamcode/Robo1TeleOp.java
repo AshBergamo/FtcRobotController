@@ -25,7 +25,5 @@ public class Robo1TeleOp extends OpMode {
         telemetry.addData("Lx: ", gamepad1.left_stick_x);
         telemetry.addData("Ly: ", gamepad1.left_stick_y);
         telemetry.addData("Rx: ", gamepad1.right_stick_x);
-        telemetry.addData("", );
-        telemetry.addData("", );
     }
 }
