@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.programas.OMotor;
 public class Robo1TeleOp extends OpMode {
     OMotor motor = new OMotor();
     IMUSensor imu = new IMUSensor();
-    
+
     @Override
     public void init() {
         motor.init(hardwareMap);
@@ -22,5 +22,10 @@ public class Robo1TeleOp extends OpMode {
         motor.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
         telemetry.addData("Heading", imu.getHeading());
+        telemetry.addData("Lx: ", gamepad1.left_stick_x);
+        telemetry.addData("Ly: ", gamepad1.left_stick_y);
+        telemetry.addData("Rx: ", gamepad1.right_stick_x);
+        telemetry.addData("", );
+        telemetry.addData("", );
     }
 }
