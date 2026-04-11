@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode.programas;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class OMotor {
     private DcMotor motorFL, motorFR, motorBL, motorBR;
+    private IMU imu;
 
     public void init(HardwareMap hwMap){
         motorFL = hwMap.get(DcMotor.class, "motorFL");
@@ -32,6 +37,17 @@ public class OMotor {
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        imu = hwMap.get(IMU.class, "imu");
+
+        imu.resetYaw();
+
+        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+        );
+
+        imu.initialize(new IMU.Parameters(RevOrientation));
     }
 
     public void drive(double forward, double side, double roll){
@@ -53,5 +69,17 @@ public class OMotor {
         motorBR.setPower(PMBR);
         motorFL.setPower(PMFL);
         motorFR.setPower(PMFR);
+    }
+
+    public void fieldOrientedDrive(double forward, double side, double roll){
+        double theta = Math.atan2(forward, side);
+        double r = Math.hypot(side, forward);
+
+        theta = AngleUnit.normalizeRadians(theta - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+
+        double newForward = r * Math.sin(theta);
+        double newSide = r * Math.cos(theta);
+
+        this.drive(newForward, newSide, roll);
     }
 }

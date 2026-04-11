@@ -11,6 +11,8 @@ public class Robo1TeleOp extends OpMode {
     OMotor motor = new OMotor();
     IMUSensor imu = new IMUSensor();
 
+    boolean fieldOriented = true; //se fieldOriented = true ele é field oriented
+
     @Override
     public void init() {
         motor.init(hardwareMap);
@@ -19,7 +21,15 @@ public class Robo1TeleOp extends OpMode {
 
     @Override
     public void loop() {
-        motor.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        if(gamepad1.y){
+            fieldOriented = !fieldOriented;
+        }
+
+        if(fieldOriented){
+            motor.fieldOrientedDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        }else{
+            motor.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        }
 
         telemetry.addData("Heading", imu.getHeading());
         telemetry.addData("Lx: ", gamepad1.left_stick_x);
