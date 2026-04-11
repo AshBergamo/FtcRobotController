@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.programas;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -27,11 +28,11 @@ public class OMotor {
 
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFR.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
+        motorFR.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
 
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
+        motorBR.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
 
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
