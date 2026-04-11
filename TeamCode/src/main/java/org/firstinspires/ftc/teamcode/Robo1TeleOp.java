@@ -11,7 +11,7 @@ public class Robo1TeleOp extends OpMode {
     OMotor motor = new OMotor();
     IMUSensor imu = new IMUSensor();
 
-    boolean fieldOriented = true; //se fieldOriented = true ele é field oriented
+    boolean fieldOriented = false; //se fieldOriented = true ele é field oriented
 
     @Override
     public void init() {
