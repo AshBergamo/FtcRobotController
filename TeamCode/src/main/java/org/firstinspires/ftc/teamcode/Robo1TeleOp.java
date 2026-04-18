@@ -26,9 +26,9 @@ public class Robo1TeleOp extends OpMode {
         }
 
         if(fieldOriented){
-            motor.fieldOrientedDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            motor.fieldOrientedDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x);
         }else{
-            motor.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            motor.drive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
 
         telemetry.addData("Heading", imu.getHeading());
