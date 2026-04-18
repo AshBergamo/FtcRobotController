@@ -20,19 +20,19 @@ public class OMotor {
 
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFL.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
+        motorFL.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
 
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBL.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
+        motorBL.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
 
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFR.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
+        motorFR.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
 
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
+        motorBR.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
 
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -44,8 +44,8 @@ public class OMotor {
         imu.resetYaw();
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
         );
 
         imu.initialize(new IMU.Parameters(RevOrientation));
