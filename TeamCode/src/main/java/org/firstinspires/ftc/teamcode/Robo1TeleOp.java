@@ -36,5 +36,10 @@ public class Robo1TeleOp extends OpMode {
         telemetry.addData("Ly: ", gamepad1.left_stick_y);
         telemetry.addData("Rx: ", gamepad1.right_stick_x);
         telemetry.addData("Field Oriented : ", fieldOriented);
+        telemetry.addData("EFR: ", motor.getEncoder(1));
+        telemetry.addData("EFL: ", motor.getEncoder(2));
+        telemetry.addData("EBR: ", motor.getEncoder(3));
+        telemetry.addData("EBL: ", motor.getEncoder(4));
+
     }
 }
