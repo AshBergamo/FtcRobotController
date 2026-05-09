@@ -8,43 +8,57 @@ import org.firstinspires.ftc.teamcode.programas.OMotor;
 public class Robo1TeleOp extends OpMode {
     OMotor motor = new OMotor();
 
-    // Variáveis para o Toggle (Edge Detector)
     boolean fieldOriented = false;
     boolean yJaPressionado = false;
 
     @Override
     public void init() {
         motor.init(hardwareMap);
-        telemetry.addData("Status", "Inicializado");
+        telemetry.addData("Status", "Inicializado e Pronto para o Drift!");
     }
 
     @Override
     public void loop() {
 
-        if(gamepad1.left_trigger_pressed && gamepad1.b){
-            motor.brakeBack(1);
-        }
-        else if (gamepad1.y && !yJaPressionado) {
+        // --- 1. TOGGLES E COMANDOS ESPECIAIS ---
+
+        // Toggle do Field Oriented (Botão Y)
+        if (gamepad1.y && !yJaPressionado) {
             fieldOriented = !fieldOriented;
             yJaPressionado = true;
         } else if (!gamepad1.y) {
             yJaPressionado = false;
         }
 
-
-        double forward = -gamepad1.left_stick_y;
-        double side    =  gamepad1.left_stick_x;
-        double turn    =  gamepad1.right_stick_x;
-
-        if (fieldOriented) {
-            motor.fieldOrientedDrive(forward, side, turn);
-        } else {
-            motor.drive(forward, side, turn);
+        // Botão de Pânico: Resetar o Giroscópio (Botão BACK / OPTIONS)
+        if (gamepad1.options) {
+            motor.resetIMU(); // Requer que você tenha adicionado o resetIMU() no OMotor
         }
 
-        // --- TELEMETRIA ---
-        telemetry.addData("Modo", fieldOriented ? "FIELD CENTRIC" : "ROBOT CENTRIC");
-        telemetry.addData("Controles", "LX: %.2f | LY: %.2f | RX: %.2f", side, forward, turn);
+        // --- 2. LÓGICA DE MOVIMENTO (A MAIS IMPORTANTE) ---
+
+        if (gamepad1.left_trigger > 0.5 && gamepad1.b) {
+
+            motor.brakeBack(1.0);
+        }
+        else {
+
+            double forward = -gamepad1.left_stick_y;
+            double side    =  gamepad1.left_stick_x;
+            double turn    =  gamepad1.right_stick_x;
+
+            if (fieldOriented) {
+                motor.fieldOrientedDrive(forward, side, turn);
+            } else {
+                motor.drive(forward, side, turn);
+            }
+        }
+
+        // --- 3. TELEMETRIA ---
+        telemetry.addData("Modo de Piloto", fieldOriented ? "🔴 FIELD CENTRIC" : "🔵 ROBOT CENTRIC");
+        telemetry.addData("Gatilho Esq (Drift)", gamepad1.left_trigger);
+        telemetry.addData("Controles", "LX: %.2f | LY: %.2f | RX: %.2f",
+                gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
         telemetry.addLine("Encoders:");
         telemetry.addData(" FR", motor.getEncoder(1));
         telemetry.addData(" FL", motor.getEncoder(2));

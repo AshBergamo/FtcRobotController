@@ -15,6 +15,7 @@ public class OMotor {
         motorFR = hwMap.get(DcMotor.class, "motorFR");
         motorBL = hwMap.get(DcMotor.class, "motorBL");
         motorBR = hwMap.get(DcMotor.class, "motorBR");
+
         motorFL.setDirection(DcMotor.Direction.FORWARD);
         motorBL.setDirection(DcMotor.Direction.FORWARD);
         motorFR.setDirection(DcMotor.Direction.REVERSE);
@@ -27,7 +28,7 @@ public class OMotor {
             m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
-        // Configuração do IMU - VERIFIQUE A POSIÇÃO FÍSICA NO SEU ROBÔ
+        // Configuração do IMU
         imu = hwMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
@@ -38,13 +39,16 @@ public class OMotor {
     }
 
     public void drive(double forward, double side, double roll) {
-        // Multiplicador de 1.1 no side ajuda a compensar a imperfeição do mecanum no strafe
+        // CORREÇÃO: Aplicando de fato o multiplicador de 1.1 no strafe!
+        // As rodas mecanum perdem energia ao andar de lado devido aos roletes.
+        side = side * 1.1;
+
         double PMFL = forward + side + roll;
         double PMFR = forward - side - roll;
         double PMBL = forward - side + roll;
         double PMBR = forward + side - roll;
 
-        // Normalização de potência para não ultrapassar 1.0
+        // Normalização de potência para não ultrapassar 1.0 e manter a proporção
         double maior = Math.max(Math.abs(PMFL), Math.max(Math.abs(PMFR),
                 Math.max(Math.abs(PMBL), Math.abs(PMBR))));
 
@@ -60,16 +64,17 @@ public class OMotor {
     }
 
     public void fieldOrientedDrive(double forward, double side, double roll) {
-        // Obtém o ângulo atual do robô em radianos
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        // Rotação de vetor para alinhar os comandos ao campo (Matriz de Rotação)
-        // x' = x cosθ - y sinθ
-        // y' = x sinθ + y cosθ
         double rotSide = side * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotForward = side * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
 
         drive(rotForward, rotSide, roll);
+    }
+
+    // NOVO MÉTODO: O botão de pânico do piloto!
+    public void resetIMU() {
+        imu.resetYaw();
     }
 
     public int getEncoder(int nMotor) {
@@ -81,7 +86,8 @@ public class OMotor {
             default: return 0;
         }
     }
-    public void brakeBack(int intensidade){
+
+    public void brakeBack(double intensidade){
         motorBL.setPower(0);
         motorBR.setPower(0);
         motorFL.setPower(intensidade);
