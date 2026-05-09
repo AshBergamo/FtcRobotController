@@ -1,74 +1,90 @@
 package org.firstinspires.ftc.teamcode.programas;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 public class OMotor {
     private DcMotor motorFL, motorFR, motorBL, motorBR;
     private IMU imu;
-    public void init(HardwareMap hwMap){
+
+    public void init(HardwareMap hwMap) {
         motorFL = hwMap.get(DcMotor.class, "motorFL");
         motorFR = hwMap.get(DcMotor.class, "motorFR");
         motorBL = hwMap.get(DcMotor.class, "motorBL");
         motorBR = hwMap.get(DcMotor.class, "motorBR");
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFL.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBL.setDirection(DcMotor.Direction.FORWARD); // Verificar no robo
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFR.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setDirection(DcMotor.Direction.REVERSE); // Verificar no robo
-        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFL.setDirection(DcMotor.Direction.FORWARD);
+        motorBL.setDirection(DcMotor.Direction.FORWARD);
+        motorFR.setDirection(DcMotor.Direction.REVERSE);
+        motorBR.setDirection(DcMotor.Direction.REVERSE);
+
+        DcMotor[] motores = {motorFL, motorFR, motorBL, motorBR};
+        for (DcMotor m : motores) {
+            m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+
+        // Configuração do IMU - VERIFIQUE A POSIÇÃO FÍSICA NO SEU ROBÔ
         imu = hwMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot( RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.UP );
-        imu.initialize(new IMU.Parameters(RevOrientation));
+        RevHubOrientationOnRobot revOrientation = new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
+        );
+        imu.initialize(new IMU.Parameters(revOrientation));
         imu.resetYaw();
     }
-    public void drive(double forward, double side, double roll){
+
+    public void drive(double forward, double side, double roll) {
+        // Multiplicador de 1.1 no side ajuda a compensar a imperfeição do mecanum no strafe
         double PMFL = forward + side + roll;
         double PMFR = forward - side - roll;
         double PMBL = forward - side + roll;
         double PMBR = forward + side - roll;
-        double maior = Math.max(Math.max(Math.abs(PMFL), Math.abs(PMFR)), Math.max(Math.abs(PMBL), Math.abs(PMBR)));
-        if(maior > 1){
-            PMBL /= maior;
-            PMBR /= maior;
-            PMFL /= maior;
-            PMFR /= maior;
+
+        // Normalização de potência para não ultrapassar 1.0
+        double maior = Math.max(Math.abs(PMFL), Math.max(Math.abs(PMFR),
+                Math.max(Math.abs(PMBL), Math.abs(PMBR))));
+
+        if (maior > 1.0) {
+            PMFL /= maior; PMFR /= maior;
+            PMBL /= maior; PMBR /= maior;
         }
-        motorBL.setPower(PMBL);
-        motorBR.setPower(PMBR);
+
         motorFL.setPower(PMFL);
         motorFR.setPower(PMFR);
+        motorBL.setPower(PMBL);
+        motorBR.setPower(PMBR);
     }
-    public void fieldOrientedDrive(double forward, double side, double roll){
-        double theta = Math.atan2(forward, side);
-        double r = Math.hypot(side, forward);
-        theta = AngleUnit.normalizeRadians(theta - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-        double newForward = r * Math.sin(theta);
-        double newSide = r * Math.cos(theta);
-        this.drive(newForward, newSide, roll);
+
+    public void fieldOrientedDrive(double forward, double side, double roll) {
+        // Obtém o ângulo atual do robô em radianos
+        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+        // Rotação de vetor para alinhar os comandos ao campo (Matriz de Rotação)
+        // x' = x cosθ - y sinθ
+        // y' = x sinθ + y cosθ
+        double rotSide = side * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
+        double rotForward = side * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
+
+        drive(rotForward, rotSide, roll);
     }
-    public float getEncoder(int nMotor) {
-        float encode=0; float mEncode=0;
-        if (nMotor == 1) {
-            encode=motorFR.getCurrentPosition();
-        } if (nMotor == 2) {
-            encode=motorFL.getCurrentPosition();
-        } if (nMotor == 3) {
-            encode=motorBR.getCurrentPosition();
-        } if (nMotor == 4) {
-            encode=motorBL.getCurrentPosition();
-        } return encode;
+
+    public int getEncoder(int nMotor) {
+        switch (nMotor) {
+            case 1: return motorFR.getCurrentPosition();
+            case 2: return motorFL.getCurrentPosition();
+            case 3: return motorBR.getCurrentPosition();
+            case 4: return motorBL.getCurrentPosition();
+            default: return 0;
+        }
+    }
+    public void brakeBack(int intensidade){
+        motorBL.setPower(0);
+        motorBR.setPower(0);
+        motorFL.setPower(intensidade);
+        motorFR.setPower(-intensidade);
     }
 }

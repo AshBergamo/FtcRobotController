@@ -8,21 +8,35 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class IMUSensor {
     private IMU imu;
 
-    public void init(HardwareMap hwMap){
+    public void init(HardwareMap hwMap) {
+        // Mapeamento do hardware
         imu = hwMap.get(IMU.class, "imu");
 
-        imu.resetYaw();
-
-        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
+        // 1. Definir a orientação ANTES de inicializar
+        RevHubOrientationOnRobot revOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
         );
 
-        imu.initialize(new IMU.Parameters(RevOrientation));
+        // 2. Inicializar com os parâmetros
+        imu.initialize(new IMU.Parameters(revOrientation));
+
+        // 3. Resetar o Yaw APÓS a configuração estar pronta
+        imu.resetYaw();
     }
 
-    public double getHeading(){
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES); //Yaw = giro
-        // Já é normalizado, quando passa de -180 vai para +180
+    /**
+     * Retorna o ângulo de guinada (Yaw) do robô.
+     * @return Ângulo em graus de -180 a 180.
+     */
+    public double getHeading() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
+
+    /**
+     * Permite que o piloto resete a orientação zero durante o jogo.
+     */
+    public void resetHeading() {
+        imu.resetYaw();
     }
 }
