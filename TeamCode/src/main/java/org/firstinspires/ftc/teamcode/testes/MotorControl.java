@@ -12,11 +12,14 @@ public class MotorControl {
 
     }
     public void setMotorSpeed(double speed){
-
         motor.setPower(speed);
     }
     public void stopMotor(){
         motor.setPower(0);
+    }
+
+    public float readEncoder(){
+        return motor.getCurrentPosition();
     }
 
 }
