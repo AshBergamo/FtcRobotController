@@ -17,27 +17,50 @@ public class testeTeleOp extends OpMode{
     IMUControler imus = new IMUControler();
 
     float encoder = 0.0f;
+    double Kp = 0.01;
+    double potenciaMax = 1;
+    double potencia = 0;
+    boolean controle = true;
+    boolean lastY = false;
 
     AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
 
     @Override
     public void init(){
+        telemetry = new MultipleTelemetry(
+                telemetry, FtcDashboard.getInstance().getTelemetry()
+        );
         M.init(hardwareMap);
         imus.init(hardwareMap);
         aprilTagWebcam.init(hardwareMap, telemetry);
         telemetry.addData("Encoder:", encoder);
         telemetry.addData("IMUs", imus.getHeading());
-        telemetry = new MultipleTelemetry(
-                telemetry, FtcDashboard.getInstance().getTelemetry()
-        );
     }
     @Override
     public void loop(){
         float stick = gamepad1.right_trigger;
         stick = stick - gamepad1.left_trigger;
-        M.setMotorSpeed(stick);
-        encoder = M.readEncoder();
         aprilTagWebcam.update();
+
+        if (controle){
+            M.setMotorSpeed(stick);
+        }else{
+            if (!Double.isNaN(aprilTagWebcam.erroAngularGraus())){
+                potencia = Math.max(-potenciaMax, Math.min(potenciaMax, Kp * aprilTagWebcam.erroAngularGraus()));
+                M.setMotorSpeed(potencia);
+            }else{
+                M.setMotorSpeed(0);
+            }
+        }
+        if (gamepad1.y && !lastY){
+            controle = !controle;
+            lastY = true;
+        }else if(!gamepad1.y){
+            lastY = false;
+        }
+        encoder = M.readEncoder();
+
+        telemetry.addData("Potência", potencia);
         telemetry.addData("Encoder:", encoder);
         telemetry.addData("IMUs", imus.getHeading());
         telemetry.update();

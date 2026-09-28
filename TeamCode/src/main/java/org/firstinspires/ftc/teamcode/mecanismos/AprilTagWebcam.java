@@ -25,6 +25,9 @@ public class AprilTagWebcam {
 
     private Telemetry telemetry;
 
+    double erroX = 0;
+    int larguraDaImagem = 640;
+
     public void init(HardwareMap hwMap, Telemetry telemetry){
         this.telemetry = telemetry;
 
@@ -46,7 +49,6 @@ public class AprilTagWebcam {
 
     public void update(){
         detectedTags = aprilTagProcessor.getDetections();
-        telemetry.update();
 
         for (AprilTagDetection detection : detectedTags){
             if (detection instanceof AprilTagSingleDetection){
@@ -69,14 +71,21 @@ public class AprilTagWebcam {
                 }
             }
         }
-
     }
 
     public List<AprilTagDetection> getDetectedTags(){
         return detectedTags;
     }
 
+    public double erroAngularGraus() {
+        for (AprilTagDetection detection : aprilTagProcessor.getDetections()) {
+            if (detection.ftcPose != null) {
+                return detection.ftcPose.bearing;
+            }
+        }
 
+        return Double.NaN;
+    }
 
 
 /*

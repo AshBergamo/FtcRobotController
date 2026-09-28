@@ -13,27 +13,27 @@ public class IMUControler {
 
     public void init(HardwareMap hwMap){
         imu = hwMap.get(IMU.class, "imu");
-        imuE = hwMap.get(IMU.class, "imuE");
+        //imuE = hwMap.get(IMU.class, "imuE");
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP, //colocar a direção da logo do controlador no robo (neste caso para cima)
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD //colocar a direção do usb do controlador no robo (nesse caso para frente)
         );
 
-        RevHubOrientationOnRobot RevOrientationE = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
-        );
+        //RevHubOrientationOnRobot RevOrientationE = new RevHubOrientationOnRobot(
+                //RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                //RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+        //);
 
         imu.initialize(new IMU.Parameters(RevOrientation));
-        imuE.initialize(new IMU.Parameters(RevOrientationE));
+        //imuE.initialize(new IMU.Parameters(RevOrientationE));
     }
 
-    public double[] getHeading(){
+    public double getHeading(){
         double leituraImu = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-        double leituraImuE = imuE.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-        double[] ImuLeituras = {leituraImu, leituraImuE};
-        return ImuLeituras; //Yaw = giro
+        //double leituraImuE = imuE.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        //double[] ImuLeituras = {leituraImu, leituraImuE};
+        return leituraImu; //Yaw = giro
         // Já é normalizado, quando passa de -180 vai para +180
     }
 }
